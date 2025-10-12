@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Analysis System</title>
+
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --card-color: #181818;
+            --text-color: #f1f1f1;
+            --placeholder-color: #aaa;
+            --accent-color: #ff0000;
+            --note-color: #888;
+            --nav-bg: #181818;
+        }
+
+        body.light {
+            --bg-color: #f9f9f9;
+            --card-color: #ffffff;
+            --text-color: #202020;
+            --placeholder-color: #666;
+            --accent-color: #ff0000;
+            --note-color: #555;
+            --nav-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Roboto", Arial, sans-serif;
+            transition: background-color 0.4s, color 0.4s;
+        }
+
+        body {
+            height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Navbar */
+        nav {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background-color: var(--nav-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 40px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-color);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            background-color: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            font-size: 15px;
+            padding: 8px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-left: 8px;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Search Box */
+        .search-container {
+            background: var(--card-color);
+            padding: 16px 25px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            width: 420px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+            transition: 0.3s ease;
+        }
+
+        .search-container:hover {
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
+        }
+
+        input[type="url"] {
+            flex: 1;
+            background: transparent;
+            border: none;
+            font-size: 16px;
+            color: var(--text-color);
+            outline: none;
+            padding: 10px;
+        }
+
+        input::placeholder {
+            color: var(--placeholder-color);
+        }
+
+        button {
+            border: none;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 16px;
+            padding: 10px 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #cc0000;
+        }
+
+        .note {
+            position: absolute;
+            bottom: 15px;
+            color: var(--note-color);
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Navbar -->
+<nav>
+    <a href="/" class="logo">YouTube Analyzer</a>
+    <div class="nav-actions">
+        <a th:href="@{/login}" class="btn">Sign in</a>
+        <a th:href="@{/register}" class="btn">Sign Up</a>
+        <button class="theme-toggle" id="themeToggle" title="Switch Theme">🌙</button>
+    </div>
+</nav>
+
+<!-- Search Form -->
+<form class="search-container" th:action="@{/analyze}" method="post" th:object="${video}">
+    <input type="url" th:field="*{url}" placeholder="Paste YouTube video link..." required>
+    <button type="submit">Analyze</button>
+</form>
+
+<p class="note">YouTube Video Analysis System © 2025</p>
+
+<script>
+    // Theme system
+    const themeToggle = document.getElementById("themeToggle");
+    const body = document.body;
+
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+        body.classList.add("light");
+        themeToggle.textContent = "☀️";
+    }
+
+    themeToggle.addEventListener("click", () => {
+        body.classList.toggle("light");
+        const isLight = body.classList.contains("light");
+        themeToggle.textContent = isLight ? "☀️" : "🌙";
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+    });
+</script>
+</body>
+</html>
