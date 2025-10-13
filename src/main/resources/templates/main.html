@@ -172,7 +172,7 @@
 
 <!-- Search Form -->
 <form class="search-container" th:action="@{/analyze}" method="post" th:object="${video}">
-    <input type="url" th:field="*{url}" placeholder="Paste YouTube video link..." required>
+    <input type="url" th:field="*{uril}" placeholder="Paste YouTube video link..." required>
     <button type="submit">Analyze</button>
 </form>
 
