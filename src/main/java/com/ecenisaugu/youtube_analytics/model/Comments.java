@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collation = "comments")
+@Document(collection = "comments")
 @Getter
 @Setter
 public class Comments {

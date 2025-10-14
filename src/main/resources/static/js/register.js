@@ -11,18 +11,23 @@ themeToggle.addEventListener("click", () => {
     themeToggle.textContent = isLight ? "☀️" : "🌙";
     localStorage.setItem("theme", isLight ? "light" : "dark");
 });
+
+
+
 const apiurl = "http://localhost:8080/api/users"
 
 async function addUser(){
-    const FirstName = document.getElementById("firstName").value;
-    const LastName = document.getElementById("lastName").value;
-    const EmailAddress = document.getElementById("emailAddress").value;
-    const Password = document.getElementById("password").value;
+    event.preventDefault(); // sayfanın yenilenmesini engeller
 
-    await fetch ("http://localhost:8080/api/users/login" ,{
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const response = await fetch ("http://localhost:8080/api/users/signUp" ,{
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({FirstName, LastName, EmailAddress, Password})
+        body: JSON.stringify({firstName, lastName, email, password})
     })
 
     if (response.ok) {
@@ -45,4 +50,8 @@ document.getElementById("signUp").addEventListener("click", () => {
 // for logo button
 document.getElementById("logo").addEventListener("click", () => {
     window.location.href = "/index.html";
-})
+});
+
+document.getElementById("signnI").addEventListener("click", () =>{
+    window.location.href ="/login.html";
+});

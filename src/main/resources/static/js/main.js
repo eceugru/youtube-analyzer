@@ -29,3 +29,19 @@ document.getElementById("signUp").addEventListener("click", () => {
 document.getElementById("logo").addEventListener("click", () => {
     window.location.href = "/index.html";
 })
+
+window.addEventListener("DOMContentLoaded", () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const navActions = document.querySelector(".nav-actions");
+
+    if (user) {
+        navActions.innerHTML = `
+            <span style="color:var(--accent-color);font-weight:500;">${user.firstName}</span>
+            <button id="logout" class="btn">Logout</button>
+        `;
+        document.getElementById("logout").addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.reload();
+        });
+    }
+});
