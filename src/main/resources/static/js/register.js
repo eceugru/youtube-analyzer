@@ -12,7 +12,24 @@ themeToggle.addEventListener("click", () => {
     localStorage.setItem("theme", isLight ? "light" : "dark");
 });
 
+// for sign in button
+document.getElementById("signIn").addEventListener("click", () => {
+    window.location.href = "/login.html";
+});
 
+// for sign up button
+document.getElementById("signUp").addEventListener("click", () => {
+    window.location.href = "/register.html";
+});
+
+// for logo button
+document.getElementById("logo").addEventListener("click", () => {
+    window.location.href = "/index.html";
+});
+
+document.getElementById("signnI").addEventListener("click", () =>{
+    window.location.href ="/login.html";
+});
 
 const apiurl = "http://localhost:8080/api/users"
 
@@ -36,22 +53,3 @@ async function addUser(){
         console.error("Bir hata oluştu:", response.status);
     }
 };
-
-// for sign in button
-document.getElementById("signIn").addEventListener("click", () => {
-    window.location.href = "/login.html";
-});
-
-// for sign up button
-document.getElementById("signUp").addEventListener("click", () => {
-    window.location.href = "/register.html";
-});
-
-// for logo button
-document.getElementById("logo").addEventListener("click", () => {
-    window.location.href = "/index.html";
-});
-
-document.getElementById("signnI").addEventListener("click", () =>{
-    window.location.href ="/login.html";
-});

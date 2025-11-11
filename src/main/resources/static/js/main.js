@@ -45,3 +45,20 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+async function sendLink(){
+    const videoUrl = document.getElementById("url").value;
+
+    const response = await fetch ("http://localhost:8080/api/comments/sentimentAnalysis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: videoUrl})
+    })
+
+    if (response.ok){
+        console.log("Başarıyla gönderilmiştir.");
+    }else{
+        console.log("Bir hata oluştu gönderilemedi", response.status);
+    }
+
+};

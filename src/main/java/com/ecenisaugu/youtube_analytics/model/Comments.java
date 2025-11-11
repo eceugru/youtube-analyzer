@@ -12,15 +12,21 @@ public class Comments {
     @Id
     private String commentId;
     private String videoId;
-    private String text;
+    private String text_tr;
+    private String text_en;
     private String author;
-    private String likeCount;
+    private int likeCount;
+    private String sentiment;
+    private float score;
 
-    public Comments(String videoId, String text, String author, String likeCount) {
+    public Comments(String videoId, String text_tr, String author, int likeCount, String sentiment, int score,String text_en) {
         this.videoId = videoId;
-        this.text = text;
+        this.text_tr = text_tr;
         this.author = author;
         this.likeCount = likeCount;
+        this.sentiment = sentiment;
+        this.text_en = text_en;
+        this.score = score;
     }
 
 }

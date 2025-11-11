@@ -171,9 +171,9 @@
 </nav>
 
 <!-- Search Form -->
-<form class="search-container" th:action="@{/analyze}" method="post" th:object="${video}">
+<form class="search-container"  method="post" onsubmit="event.preventDefault(); sendLink();">
     <input type="url" id="url" placeholder="Paste YouTube video link..." required>
-    <button type="submit">Analyze</button>
+    <button type="submit" >Analyze</button>
 </form>
 
 <p class="note">YouTube Video Analysis System © 2025</p>

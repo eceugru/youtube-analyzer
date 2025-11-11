@@ -19,17 +19,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // CSRF kapalı olmalı çünkü fetch() ile çalışıyorsun
+
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index","/api/users","/api/users/signUp","/api/users/signIn", "/index.html", "/login.html", "/register.html", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/index","/api/users","/api/comments", "/api/comments/sentimentAnalysis","/api/users/signUp","/api/users/signIn", "/index.html", "/login.html", "/register.html", "/css/**", "/js/**", "/images/**").permitAll()
 
                         .requestMatchers("/","index").permitAll()
                         .anyRequest().authenticated()
                 )
-                // Spring'in kendi form login ekranını kapat
+
                 .formLogin(form -> form.disable())
-                // logout işlemini de biz yöneteceğiz
+
                 .logout(logout -> logout.disable());
         return http.build();
     }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collation = "videoAnalyses")
+@Document(collection = "videoAnalyses")
 @AllArgsConstructor
 @Getter
 @Setter
