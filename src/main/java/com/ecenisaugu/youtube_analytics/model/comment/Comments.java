@@ -1,10 +1,11 @@
-package com.ecenisaugu.youtube_analytics.model;
+package com.ecenisaugu.youtube_analytics.model.comment;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+// Bunu gerek görmüyorum. Çünkü bunu python tarafında kayıt yapılıyor.
 @Document(collection = "comments")
 @Getter
 @Setter
@@ -19,7 +20,8 @@ public class Comments {
     private String sentiment;
     private float score;
 
-    public Comments(String videoId, String text_tr, String author, int likeCount, String sentiment, int score,String text_en) {
+
+    public Comments(String videoId, String text_tr, String author, int likeCount, String sentiment, float score,String text_en) {
         this.videoId = videoId;
         this.text_tr = text_tr;
         this.author = author;

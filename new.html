@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Analysis Result</title>
+
+    <style>
+        body {
+            background: #0f0f0f;
+            color: #f1f1f1;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            width: 600px;
+        }
+
+        .loader {
+            border: 6px solid #333;
+            border-top: 6px solid #ff0000;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #results {
+            display: none;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div id="loading">
+        <h2>Analiz devam ediyor...</h2>
+        <div class="loader"></div>
+        <p>Lütfen bekleyin</p>
+    </div>
+
+    <div id="results">
+        <h2>Analiz Sonucu</h2>
+        <pre id="resultData"></pre>
+    </div>
+</div>
+
+<script src="js/results.js"></script>
+</body>
+</html>

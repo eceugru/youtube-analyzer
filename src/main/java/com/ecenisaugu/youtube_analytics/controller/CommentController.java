@@ -1,46 +1,57 @@
 package com.ecenisaugu.youtube_analytics.controller;
 
-import com.ecenisaugu.youtube_analytics.dto.VideoDetailsDTO;
-import com.ecenisaugu.youtube_analytics.repository.CommentsRepository;
+import com.ecenisaugu.youtube_analytics.model.AnalysisJob;
+import com.ecenisaugu.youtube_analytics.repository.AnalysisJobRepository;
 import com.ecenisaugu.youtube_analytics.service.CommentService;
 import com.ecenisaugu.youtube_analytics.service.VideoLinkProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/comments")
 public class CommentController {
-    private final CommentsRepository commentsRepository;
-
     @Autowired
     private VideoLinkProducer videoLinkProducer;
-    private CommentService commentService;
-
-    CommentController(CommentsRepository commentsRepository) {
-        this.commentsRepository = commentsRepository;
-    }
+    @Autowired
+    private AnalysisJobRepository analysisJobRepository;
 
     @PostMapping("/sentimentAnalysis")
-    public ResponseEntity<String> sentimentAnalysis(@RequestBody Map<String, String> videoUrl){
+    public ResponseEntity<Map<String,String>> sentimentAnalysis(@RequestBody Map<String, String> body){
         // Burada link frontend 'den çekilir ✅
         //rabbitmq ile pythona job atanır.
         // --> Python linki alır ve işler.
-        String url = videoUrl.get("url");
-        System.out.println("Video linki : " + url);
+        String url = body.get("url");
 
-        videoLinkProducer.sendVideoUrl(url);
+        String videoId = CommentService.extractVideoId(url);
 
-        return ResponseEntity.ok("Video link RabbitMQ'ya gönderildi: " + url);
+        String jobId = UUID.randomUUID().toString();
+
+        AnalysisJob analysisJob = new AnalysisJob();
+        analysisJob.setJobId(jobId);
+        analysisJob.setVideoId(videoId);
+        analysisJob.setVideoAUrl(null);
+        analysisJob.setVideoBUrl(null);
+        analysisJob.setStatus("RUNNING");
+
+        analysisJobRepository.save(analysisJob);
+
+        // queue'ye bu gönderiliyor 
+        Map<String,String> map = Map.of(
+                "jobId", jobId,
+                "videoUrl",url
+        );
+
+        videoLinkProducer.sendVideoUrl(map);
+
+
+        return ResponseEntity.ok(Map.of("jobId", jobId));
     };
 
-    @GetMapping("/sentimentAnalysis")
-    public VideoDetailsDTO getVideoDetailController(@RequestBody Map<String, String> videoUrl){
-        return null;
-    }
-
-
+    // ----------------------------------------------
+    // Verilerin gönderilmesi jobController ile yapılıyor
+    // ----------------------------------------------
 
 }

@@ -2,10 +2,11 @@ import pika
 import os
 import sys
 import time
+import json
 from youtube_service import get_video_comments, extract_video_id
 from sentiment_service import analiz_et
-from db_service import save_comments, get_comments, save_summary
-from summarize_service import summarize_comments
+from db_service import save_comments, save_video_detail, update_job_status
+from video_details import get_video_details
 
 
 # Print'lerin hemen loglara düşmesini sağlar
@@ -39,18 +40,27 @@ for attempt in range(10):
 else:
     print("❌ RabbitMQ'ya bağlanılamadı, çıkılıyor.")
     exit(1)
+    
+    
 
 channel = connection.channel()
 channel.queue_declare(queue=QUEUE, durable=True)
 
+
+
 def handle_message(ch, method, properties, body):
     print(f"Yeni video linki alındı: {body.decode('utf-8')}")
-    video_url = body.decode('utf-8')
     try:
+        # Burada python'na link gelmeli ve videoId'yi kendi bulmalı
+        data = json.loads(body)
+        jobId = data["jobId"]
+        video_url = data["videoUrl"]
         print("⚠ try")
 
+        # url bilgisi ile yorumları çekiyor
         comments  = get_video_comments(video_url, max_comments=1000000)
 
+        # url'den videoId çıkartılıyor
         videoId = extract_video_id(video_url)
 
         print("👍" + videoId)
@@ -60,21 +70,36 @@ def handle_message(ch, method, properties, body):
         save_comments(videoId, analyzed)
 
         print(f"✅ '{videoId}' için {len(analyzed)} yorum işlendi ve kaydedildi.")
-
-        commentList = [c["text_en"] for c in get_comments(videoId) if "text_en" in c]
-
-        videoCommentsSummary = summarize_comments(commentList)
-
-
-        print(f"✅ '{videoId}' için yorumların özeti çıkarıldı.")
-
-        save_summary(videoId, videoCommentsSummary)
-
-        print(f"✅ '{videoId}' için yorum özeti kaydedildi.")
+        
+        videoDetails = get_video_details(videoId)
+        
+        save_video_detail(videoId, videoDetails)
+        
+        
+        #-----------------------------
+        # Summarize service tetikleme
+        #-----------------------------
+        
+        message = json.dumps({"videoId" : videoId, "jobId": jobId})
+        
+        channel.basic_publish(
+            exchange="",
+            routing_key="comment.summary.queue",
+            body=message,
+            properties=pika.BasicProperties(
+                delivery_mode=2
+            )
+        )
+        
+        print("📤 comment.summary.queue kuyruğuna mesaj gönderildi")
 
         ch.basic_ack(delivery_tag=method.delivery_tag)
+
+        
     except Exception as e:
         print(f"❌ İşlem 😁 hatası: {e}")
+        # jobState = "FAILED"
+        update_job_status(jobId, "FAILED")
         ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
     return
 

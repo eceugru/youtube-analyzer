@@ -50,12 +50,10 @@ def get_video_comments(video_url, max_comments=100, delay=1.0):
             yorum = item['snippet']['topLevelComment']['snippet']['textOriginal']
             yazar = item['snippet']['topLevelComment']['snippet']['authorDisplayName']
             like = item['snippet']['topLevelComment']['snippet']['likeCount']
-            publishedAt = item['snippet']['topLevelComment']['snippet']['publishedAt']
             comments.append({
                 'author': yazar,
                 'text': yorum,
-                'like_count':like,
-                'date': publishedAt
+                'like_count':like
             })
             total_fetched += 1
 

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Comparison</title>
+
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --card-color: #181818;
+            --text-color: #f1f1f1;
+            --accent-color: #ff0000;
+            --muted: #888;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg-color);
+            color: var(--text-color);
+            padding-top: 80px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--card-color);
+            padding: 14px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 0 20px;
+        }
+
+        .videos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card-color);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .video-box {
+            height: 200px;
+            background: #000;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+        }
+
+        button {
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid var(--accent-color);
+            background: transparent;
+            color: var(--accent-color);
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: var(--accent-color);
+            color: #fff;
+        }
+
+        .result {
+            display: none;
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        .highlight {
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            color: var(--muted);
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">YouTube Analyzer</div>
+</nav>
+
+<div class="container">
+
+    <!-- URL GİRİŞ -->
+    <div class="videos">
+        <div class="card">
+            <h3>Video A</h3>
+            <div class="video-box">
+                <input id="urlA" placeholder="Video A YouTube linki">
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Video B</h3>
+            <div class="video-box">
+                <input id="urlB" placeholder="Video B YouTube linki">
+            </div>
+        </div>
+    </div>
+
+    <button id="startCompare">Karşılaştırmayı Başlat</button>
+
+    <div class="loader" id="loader">
+        <p>Karşılaştırma yapılıyor...</p>
+    </div>
+
+    <!-- SONUÇ -->
+    <div class="card result" id="result">
+        <h3>Karşılaştırma Sonucu</h3>
+        <p id="comparisonText"></p>
+    </div>
+
+</div>
+
+<script src="js/compare.js"></script>
+</body>
+</html>

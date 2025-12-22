@@ -56,9 +56,12 @@ async function sendLink(){
     })
 
     if (response.ok){
+        localStorage.setItem("lastVideoUrl", videoUrl);
+        window.location.href = "/results.html";
         console.log("Başarıyla gönderilmiştir.");
     }else{
         console.log("Bir hata oluştu gönderilemedi", response.status);
+        alert("Analiz başlatılamadı, lütfen tekrar deneyin.");
     }
 
 };

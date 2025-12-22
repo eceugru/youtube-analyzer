@@ -1,28 +1,28 @@
 package com.ecenisaugu.youtube_analytics.service;
 
+import java.util.Map;
+
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 @Service
-public class VideoLinkProducer {
+public class VideoCompareProducer {
     private final RabbitTemplate rabbitTemplate;
 
     @Value("${app.rabbit.exchange}")
     private String exchange;
 
-    @Value("${app.rabbit.routing.link}")
+    @Value("${app.rabbit.routing.transcript}")
     private String routingKey;
 
-    public VideoLinkProducer(RabbitTemplate rabbitTemplate) {
+    public VideoCompareProducer(RabbitTemplate rabbitTemplate){
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    // video url comment kuyruğuna gönderiyor
-    public void sendVideoUrl(Map<String,String> payload) {
-        System.out.println(" Video link RabbitMQ'ya gönderiliyor: " + payload);
+    public void sendVideoUrls(Map<String,String> payload){
+        System.out.println("Video linkleri gönderiliyor: " + payload);
         rabbitTemplate.convertAndSend(exchange, routingKey, payload);
     }
+    
 }

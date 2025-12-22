@@ -2,6 +2,9 @@ import networkx as nx
 import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import os
+
+LLAMA_HOST = os.getenv("LLAMA_HOST", "http://ollama:11434")
 
 def simple_sentence_split(text):
     """Basit ama etkili bir cümle bölücü (nokta, ünlem, soru işareti üzerinden)."""
@@ -11,11 +14,13 @@ def simple_sentence_split(text):
         if len(s) > 3:  # çok kısa cümleleri ele
             sentences.append(s)
     return sentences
-
-def summarize_comments(comments, top_k=5, max_chars=2000, llama_host="http://host.docker.internal:11434"):
+ 
+#------------------------
+# Yorum özeti çıkarma 
+#------------------------
+def summarize_comments(comments, top_k=5, max_chars=2000, llama_host=LLAMA_HOST):
     """
     Yorum listesini (İngilizce) alır, TextRank + Llama3 ile özet döndürür.
-    NLTK gerekmez.
     """
     # --- 1️⃣ TextRank (extractive) ---
     text = " ".join(c.strip() for c in comments if c and isinstance(c, str))
@@ -32,7 +37,8 @@ def summarize_comments(comments, top_k=5, max_chars=2000, llama_host="http://hos
     nx_graph = nx.from_numpy_array(sim)
     scores = nx.pagerank(nx_graph)
 
-    ranked = sorted(((scores[i], s) for i, s) in enumerate(sentences), reverse=True)
+    ranked = sorted(((scores[i], s) for i, s in enumerate(sentences)), reverse=True)
+
     selected = [s for _, s in ranked[:top_k]]
     score_map = {sentences[i]: float(scores[i]) for i in range(len(sentences))}
 
@@ -59,4 +65,4 @@ def summarize_comments(comments, top_k=5, max_chars=2000, llama_host="http://hos
     except Exception as e:
         summary = f"[Llama3 error: {e}]"
 
-    return {"summary": summary, "selected_sentences": selected, "scores": score_map}
+    return {"summary": summary}

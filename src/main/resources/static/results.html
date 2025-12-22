@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Analysis Result</title>
+
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --card-color: #181818;
+            --text-color: #f1f1f1;
+            --accent-color: #ff0000;
+            --muted: #888;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg-color);
+            color: var(--text-color);
+            padding-top: 80px;
+        }
+
+        /* NAVBAR */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--card-color);
+            padding: 14px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* LOADER */
+        #loading {
+            text-align: center;
+            margin-top: 120px;
+        }
+
+        .loader {
+            border: 6px solid #333;
+            border-top: 6px solid var(--accent-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* MAIN */
+        #results {
+            display: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 2fr 1.2fr;
+            gap: 24px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: var(--card-color);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        /* LEFT */
+        .video-preview {
+            height: 260px;
+            background: #000;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+        }
+
+        .summary {
+            margin-top: 20px;
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        /* RIGHT */
+        .stats ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .stats li {
+            margin: 8px 0;
+            font-size: 15px;
+        }
+
+        .pozitif { color: #4caf50; }
+        .negatif { color: #f44336; }
+        .nötr, .notr { color: #ff9800; }
+
+
+        .comments {
+            margin-top: 20px;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .comment {
+            border-bottom: 1px solid #333;
+            padding: 10px 0;
+        }
+
+        .comment small {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .compare-btn {
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            background: transparent;
+            padding: 8px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .compare-btn:hover {
+            background: var(--accent-color);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">YouTube Analyzer</div>
+    <button class="compare-btn" id="goCompare">İki Videoyu Karşılaştır</button>
+</nav>
+
+<!-- LOADER -->
+<div id="loading">
+    <h2>Analiz devam ediyor...</h2>
+    <div class="loader"></div>
+    <p>Lütfen bekleyin</p>
+</div>
+
+<!-- RESULTS -->
+<div id="results">
+    <div class="container">
+
+        <!-- SOL -->
+        <div>
+            <div class="card video-preview">
+                Video Önizleme
+            </div>
+
+            <div class="card summary">
+                <h3>Yorumların Özeti</h3>
+                <p id="summaryText"></p>
+            </div>
+        </div>
+
+        <!-- SAĞ -->
+        <div>
+            <div class="card stats">
+                <h3>Yorum İstatistikleri</h3>
+                <ul>
+                    <li class="positive">😊 Pozitif: <span id="positiveCount"></span></li>
+                    <li class="neutral">😐 Nötr: <span id="neutralCount"></span></li>
+                    <li class="negative">😡 Negatif: <span id="negativeCount"></span></li>
+                </ul>
+            </div>
+
+            <div class="card comments">
+                <h3>Sentiment Yorumlar</h3>
+                <div id="commentsList"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="js/results.js"></script>
+
+</body>
+</html>
