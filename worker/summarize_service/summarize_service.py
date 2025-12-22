@@ -4,7 +4,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import os
 
-LLAMA_HOST = os.getenv("LLAMA_HOST", "http://ollama:11434")
+LLAMA_HOST = os.getenv("LLAMA_HOST", "http://ollama:11434/api/generate")
 
 def simple_sentence_split(text):
     """Basit ama etkili bir cümle bölücü (nokta, ünlem, soru işareti üzerinden)."""

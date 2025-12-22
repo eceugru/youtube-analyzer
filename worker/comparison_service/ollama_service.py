@@ -6,7 +6,7 @@ from similarity_service import compute_semantic_similarity, compute_tfidf_simila
 
 """ SBERT + TF-IDF + Keyword Overlap ile hesaplanan nicel (sayısal) benzerliği LLaMA 3 gibi bir büyük dil modeline yorumlatmak """
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
+OLLAMA_URL = "http://ollama:11434/api/generate"
 MODEL = "llama3"
 
 
